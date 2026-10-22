@@ -10,9 +10,9 @@ env.config();
 
 export const createWarehouse = async(req, res) => {
     try {
-        const { name,address,city,country } = req.body;
+        const { ware_name,ware_address,ware_city,ware_country } = req.body;
 
-        if (!name || !address || !city || !country) {
+        if (!ware_name || !ware_address || !ware_city || !ware_country) {
             return sendError(
                 res,
                 400,
@@ -21,10 +21,10 @@ export const createWarehouse = async(req, res) => {
         }
 
         const warehouse = await Warehouse.create({
-            name,
-            address,
-            city,
-            country,
+            ware_name,
+            ware_address,
+            ware_city,
+            ware_country,
             warehouse_image: {
                 url: req.file?.path || null,
                 public_id: req.file?.filename || null

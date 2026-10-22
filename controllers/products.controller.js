@@ -181,8 +181,6 @@ export const deleteProduct = async(req, res)=>{
 }
 
 
-
-
 export const getProductsByCategory = async (req, res) => {
     try {
         const { cat_id } = req.params;

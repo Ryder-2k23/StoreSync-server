@@ -8,12 +8,13 @@ import Supplier from "../models/supplier.model.js";
 import Warehouse from "../models/warehose.model.js";
 import Category from "../models/categories.model.js";
 import Purchase from "../models/purchase.model.js";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
 
 export const createPurchase = async(req, res)=>{
     try {
-        const { supplier, product, warehouse, qty_recieved, unit_purchase_cost, status, total_cost } = req.body;
+        const { supplier, product, warehouse, category, qty_recieved, unit_purchase_cost, status } = req.body;
         
-        if(!supplier || !product || !warehouse || !qty_recieved || !unit_purchase_cost, status, total_cost){
+        if(!supplier || !product || !warehouse || !category || !qty_recieved || !unit_purchase_cost, !status){
             return sendError(
                 res,
                 400,
@@ -25,13 +26,13 @@ export const createPurchase = async(req, res)=>{
             supplier,
             product,
             warehouse,
+            category,
             qty_recieved,
             unit_purchase_cost,
-            status,
-            total_cost
+            status
         });
 
-        return sendSuccess(res,201,"Purchase created successfully", purchase);
+        return sendSuccess(res,201,"Purchase recorded successfully", purchase);
     } catch (error) {
         console.error("Error creating Product: ", error);
         
@@ -52,7 +53,7 @@ export const getAllPurchase = async(req, res)=>{
         .populate("category", "cat_name")
         .populate("supplier", "supplier_name agent_contact supplier_location")
         
-        return sendSuccess(res, 200, "Purchase recorded sucessfully!")
+        return sendSuccess(res, 200, "Purchase recorded sucessfully!", purchase)
     } catch (error) {
         console.error("Error recording purchase: ", error);
         
@@ -145,6 +146,37 @@ export const deletPurchase = async(req, res)=>{
             res,
             500,
             "Failed to delete purchase",
+            error.message
+        );
+    }
+}
+
+export const retrieve_purchaseOfAWarehouse = async(req, res)=>{
+    try {
+        const { warehouse_id } = req.params;
+        
+        const warehouse = await Warehouse.findById(warehouse_id);
+
+        if(!warehouse){
+            return sendError(res,404,"Warehouse not found");
+        }
+
+        const purchases = await Purchase.find({
+            warehouse:warehouse._id
+        })
+
+        if(!purchases){
+            return sendError(res, 404, "There is no purchases made yet here");
+        }
+
+        return sendSuccess(res,200,"Purchases retrieved successfully", purchases)
+    } catch (error) {
+        console.error("Error retrieving purchase: ", error);
+        
+        return sendError(
+            res,
+            500,
+            "Failed to retrieve purchase",
             error.message
         );
     }

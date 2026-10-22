@@ -7,7 +7,8 @@ import errorMiddleware from "./middlewares/error.middleware.js";
 import productRoutes from "./routes/products.routes.js";
 import categoryRoutes from "./routes/categories.routes.js";
 import supplierRoutes from "./routes/supplier.route.js";
-import warehouseRoutes from "./routes/warehouse.route.js"
+import warehouseRoutes from "./routes/warehouse.route.js";
+import purchaseRoutes from "./routes/purchase.routes.js";
 
 dotenv.config()
 
@@ -33,6 +34,7 @@ app.use("/StoreSync/products", productRoutes);
 app.use("/StoreSync/categories", categoryRoutes);
 app.use("/StoreSync/suppliers", supplierRoutes);
 app.use("/StoreSync/warehouses", warehouseRoutes);
+app.use("/StoreSync/purchases", purchaseRoutes);
 
 
 connectDB()
