@@ -19,17 +19,30 @@ const purchaseSchema = new mongoose.Schema({
         ref:"Warehouse",
         required:true
     },
-    qty_recieved:{
-        type:Number,
+    category:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"Category",
         required:true
     },
-    unit_purchase_cost:{
+    qty_recieved:[{
         type:Number,
+        required:true
+    }],
+    unit_purchase_cost:[{
+        type:Number,
+        required:true
+    }],
+    status:{
+        type: String,
+        enum: ["completed","failed", "pending"],
+        default: "completed",
+        lowercase: true,
         required:true
     },
     total_cost: {
         type: Number,
-        default: 0
+        default: 0,
+        required:true
     }
 },{timestamps: true});
 

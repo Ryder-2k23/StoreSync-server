@@ -29,7 +29,7 @@ export const createProduct = async(req, res)=>{
 
         return sendSuccess(res, 201, "Product created successfully", product);
     } catch (error) {
-        console.error("Error creating Product:", error);
+        console.error("Error creating Product: ", error);
 
         return sendError(
             res,

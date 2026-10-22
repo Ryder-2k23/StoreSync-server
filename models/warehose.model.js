@@ -1,25 +1,25 @@
 import mongoose from "mongoose";
 
 const warehouseSchema = new mongoose.Schema({
-    name:{
+    ware_name:{
         type:String,
         required: true,
         trim: true,
         uppercase: true
     },
-    address:{
+    ware_address:{
         type:String,
         required: true,
         trim: true,
         lowercase: true
     },
-    city:{
+    ware_city:{
         type:String,
         required: true,
         trim: true,
         lowercase: true
     },
-     country:{
+     ware_country:{
         type:String,
         required: true,
         trim: true,
