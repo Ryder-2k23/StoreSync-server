@@ -1,11 +1,11 @@
 const errorMiddleware = (error, req, res, next)=>{
-    console.error("Unhandled error: ", err);
+    console.error("Unhandled error: ", error);
 
-    const statusCode = err.statusCode || 500;
+    const statusCode = error.statusCode || 500;
 
     res.status(statusCode).json({
         success: false,
-        message: err.message || "Internal server error"
+        message: error.message || "Internal server error"
     });
     
 };

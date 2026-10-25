@@ -9,6 +9,8 @@ import categoryRoutes from "./routes/categories.routes.js";
 import supplierRoutes from "./routes/supplier.route.js";
 import warehouseRoutes from "./routes/warehouse.route.js";
 import purchaseRoutes from "./routes/purchase.routes.js";
+import stockRoutes from "./routes/stock.routes.js";
+import StockMovementRoutes from "./routes/stock-movement.routes.js";
 
 dotenv.config()
 
@@ -35,6 +37,8 @@ app.use("/StoreSync/categories", categoryRoutes);
 app.use("/StoreSync/suppliers", supplierRoutes);
 app.use("/StoreSync/warehouses", warehouseRoutes);
 app.use("/StoreSync/purchases", purchaseRoutes);
+app.use("/StoreSync/stocks", stockRoutes);
+app.use("/StoreSync/stock_movements", StockMovementRoutes);
 
 
 connectDB()

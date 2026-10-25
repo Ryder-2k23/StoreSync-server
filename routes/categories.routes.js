@@ -4,7 +4,7 @@ import { createCategory, getAllCategories, getCategoryById, updateCategory, dele
 
 const router = express.Router();
 
-router.post("/create", upload.single("category_img"), createCategory);
+router.post("/create", upload.array("cat_img"), createCategory);
 router.get("/", getAllCategories);
 router.get("/:cat_id", getCategoryById);
 router.put("/update/:cat_id", upload.array("cat_img", 5), updateCategory);

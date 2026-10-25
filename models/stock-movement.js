@@ -13,6 +13,11 @@ const stockMovementSchema = new mongoose.Schema({
             ref:"Warehouse",
             required:true
     },
+     category:{
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"Category",
+            required:true
+    },
     quantity_affected: {
       type: Number,
       required: true,
@@ -50,3 +55,4 @@ const stockMovementSchema = new mongoose.Schema({
 
 const StockMovement = mongoose.model("StockMovement",stockMovementSchema );
 export default StockMovement;
+

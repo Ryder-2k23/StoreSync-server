@@ -5,6 +5,7 @@ import { sendSuccess, sendError } from "../utils/response.js";
 
 import Product from "../models/products.model.js";
 import Category from "../models/categories.model.js";
+import mongoose from "mongoose";
 
 env.config();
 
@@ -89,18 +90,36 @@ export const updateCategory = async (req, res) => {
     try {
         const { cat_id } = req.params;
 
-        // Start with the ordinary product fields
+        // Check whether the category ID is valid
+        if (!cat_id || !mongoose.Types.ObjectId.isValid(cat_id)) {
+            return sendError(res, 400, "Invalid category ID");
+        }
+
+        // Start with ordinary fields
         const updateData = { ...req.body };
 
-        // Only update images when new files are uploaded
-        if (req.files && req.files.length > 0) {
-            const images = req.files.map((file) => ({
+        // Support both single and multiple file uploads
+        const files = req.file
+            ? [req.file]
+            : Array.isArray(req.files)
+                ? req.files
+                : req.files?.product_image || [];
+
+        console.log("Request body:", req.body);
+        console.log("Uploaded files:", files);
+
+        if (files.length > 0) {
+            const images = files.map((file) => ({
                 url: file.path,
                 public_id: file.filename,
             }));
 
-            // Make sure Cloudinary returned the image details
-            if (images.some((image) => !image.url || !image.public_id)) {
+            // Validate Cloudinary upload results
+            if (
+                images.some(
+                    (image) => !image.url || !image.public_id
+                )
+            ) {
                 return sendError(
                     res,
                     500,
@@ -108,14 +127,14 @@ export const updateCategory = async (req, res) => {
                 );
             }
 
-            updateData.product_image = images;
+            updateData.cat_img = images;
         }
 
         const category = await Category.findByIdAndUpdate(
             cat_id,
             { $set: updateData },
             {
-                returnDocument: "after",
+                new: true,
                 runValidators: true,
             }
         );
@@ -127,7 +146,7 @@ export const updateCategory = async (req, res) => {
         return sendSuccess(
             res,
             200,
-            "Product updated successfully",
+            "Category updated successfully",
             category
         );
     } catch (error) {
