@@ -6,8 +6,8 @@ const router = express.Router();
 
 
 router.post("/create",staffAuthMiddleware,authorizeRoles("manager", "admin"),  createSupplier);
-router.get("/", getAllSuppliers);
-router.get("/:sup_id", getSupplierById);
+router.get("/", staffAuthMiddleware,getAllSuppliers);
+router.get("/:sup_id",staffAuthMiddleware, getSupplierById);
 router.put("/update/:sup_id",staffAuthMiddleware,authorizeRoles("manager", "admin"), updateSupplier);
 router.delete("/delete/:sup_id",staffAuthMiddleware,authorizeRoles("admin"), deleteSupplier);
 
