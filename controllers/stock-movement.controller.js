@@ -295,3 +295,202 @@ export const getAllStockMovementsFromAwarehouse = async (req, res) => {
         return sendError(res, 500, "Failed to retrieve stock movement", error.message);
     }
 };
+
+export const deleteStockMovement = async(req, res)=>{
+    try {
+        const { movement_id } = req.params
+        const movement = await StockMovement.findByIdAndDelete(movement_id);
+        if(!movement){
+            return sendError(
+                res,
+                404,
+                "Movement not found"
+            )
+        };
+        return sendSuccess(res, 200, "Movement successfullly erased");
+    } catch (error) {
+        console.error("Delete movement error: ", error);
+        return sendError(
+            res,
+            500,
+            "Error deleting movement",
+            error.message
+        )
+    }
+}
+
+
+
+export const adjustStock = async (req, res) => {
+    const session = await mongoose.startSession();
+
+    try {
+        const { product, warehouse, category, actualQuantity, reason } = req.body;
+
+        // Validate required fields
+        if ( !product || !warehouse || !category || actualQuantity === undefined || !reason ) {
+            return sendError(
+                res,
+                400,
+                "Please provide product, warehouse, category, actual quantity, and reason"
+            );
+        }
+
+        // Validate the actual physical count
+        if (!Number.isInteger(actualQuantity) ||actualQuantity < 0) {
+            return sendError(
+                res,
+                400,
+                "Actual quantity must be a non-negative whole number"
+            );
+        }
+
+        if (typeof reason !== "string" || !reason.trim()) {
+            return sendError(res, 400, "Please provide a valid reason");
+        }
+
+        // Check referenced records
+        const [existingProduct, existingWarehouse, existingCategory] =
+            await Promise.all([
+                Product.findById(product),
+                Warehouse.findById(warehouse),
+                Category.findById(category)
+            ]);
+
+        if (!existingProduct) {
+            return sendError(res, 404, "Product does not exist");
+        }
+
+        if (!existingWarehouse) {
+            return sendError(res, 404, "Warehouse does not exist");
+        }
+
+        if (!existingCategory) {
+            return sendError(res, 404, "Category does not exist");
+        }
+
+        let result;
+
+        await session.withTransaction(async () => {
+            // Find the current stock record
+            const currentStock = await Stock.findOne({
+                product,
+                warehouse
+            }).session(session);
+
+            if (!currentStock) {
+                throw new Error("STOCK_RECORD_NOT_FOUND");
+            }
+
+            const currentQuantity = currentStock.quantity;
+            const difference = actualQuantity - currentQuantity;
+
+            // No adjustment is needed
+            if (difference === 0) {
+                result = {
+                    adjusted: false,
+                    currentQuantity,
+                    actualQuantity,
+                    difference: 0,
+                    movement: null
+                };
+                return;
+            }
+
+            const movementType =
+                difference > 0 ? "adjusted-in" : "adjusted-out";
+
+            // Update the stock quantity
+            const updatedStock = await Stock.findOneAndUpdate(
+                {
+                    _id: currentStock._id,
+                    quantity: currentQuantity
+                },
+                {
+                    $set: {
+                        quantity: actualQuantity,
+                        category
+                    }
+                },
+                {
+                    new: true,
+                    runValidators: true,
+                    session
+                }
+            );
+
+            if (!updatedStock) {
+                throw new Error("STOCK_CHANGED_RETRY");
+            }
+
+            // Record the adjustment for auditing
+            const createdMovements = await StockMovement.create(
+                [{
+                    product,
+                    warehouse,
+                    category,
+                    quantity_affected: Math.abs(difference),
+                    movementType,
+                    reason: reason.trim(),
+                    referenceType: "adjustment",
+                    referenceId: null
+                }],
+                { session }
+            );
+
+            result = {
+                adjusted: true,
+                previousQuantity: currentQuantity,
+                actualQuantity,
+                difference,
+                stock: updatedStock,
+                movement: createdMovements[0]
+            };
+        });
+
+        if (!result.adjusted) {
+            return sendSuccess(
+                res,
+                200,
+                "Stock already matches the physical count; no adjustment was needed",
+                result
+            );
+        }
+
+        return sendSuccess(
+            res,
+            200,
+            "Stock adjusted successfully",
+            result
+        );
+
+    } catch (error) {
+        console.error("Error adjusting stock:", error);
+
+        if (error.message === "STOCK_RECORD_NOT_FOUND") {
+            return sendError(
+                res,
+                404,
+                "Stock record not found for this product and warehouse"
+            );
+        }
+
+        if (error.message === "STOCK_CHANGED_RETRY") {
+            return sendError(
+                res,
+                409,
+                "Stock changed during adjustment. Please retry"
+            );
+        }
+
+        return sendError(
+            res,
+            500,
+            "Failed to adjust stock",
+            error.message
+        );
+
+    } finally {
+        await session.endSession();
+    }
+};

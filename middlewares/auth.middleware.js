@@ -1,11 +1,11 @@
 import jwt from "jsonwebtoken";
-import User from "../models/user.model.js";
+import Staff from "../models/staff.model.js";
 import  dotenv  from "dotenv";
 
 
 dotenv.config()
 
-export const authMiddleware = async(req, res, next)=>{
+export const staffAuthMiddleware = async(req, res, next)=>{
     try {
         const authHeader = req.headers.authorization; //this simply means go to the headers and look for tokens cause every requests u make has headers
 
@@ -18,16 +18,16 @@ export const authMiddleware = async(req, res, next)=>{
         const  token = authHeader.split(" ")[1];
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-        const user = await User.findById(decoded.id).select("-password");
+        const staff = await Staff.findById(decoded.id).select("-password +role");
 
-        if(!user){
+        if(!staff){
             return res.status(401).json({
                 success:false,
-                message:"User account no longer exists"
+                message:"Staff account no longer exists"
             })
         }
 
-        req.user = user;
+        req.staff = staff;
         next()
 
     } catch (error) {
@@ -44,3 +44,26 @@ export const authMiddleware = async(req, res, next)=>{
         })
     }
 }
+
+
+export const authorizeRoles = (...allowedRoles) => {
+    return (req, res, next) => {
+        // Authentication middleware should run first
+        if (!req.staff) {
+            return res.status(401).json({
+                success: false,
+                message: "Authentication required"
+            });
+        }
+
+        // Check whether the logged-in staff member has permission
+        if (!allowedRoles.includes(req.staff.role)) {
+            return res.status(403).json({
+                success: false,
+                message: "You are not authorized to perform this action"
+            });
+        }
+
+        next();
+    };
+};

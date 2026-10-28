@@ -407,21 +407,27 @@ POST /purchases/
 
 DESCP To make a purchase
 
-BODY {
+BODY{
 
-&#x20;   "supplier":"6ada06ec3f1c56e245399879",
+&#x20;  "supplier":"6ada06ec3f1c56e245399879",
 
-&#x20;   "product":"6ad75d6cead0beded09a488e",
+&#x20;  "items":\[
 
-&#x20;   "warehouse":"6ada093231a842d12136b5b5", 
+&#x20;       	{
 
-&#x20;   "category":"6ad77d8f04091b90e37a597d", 
+&#x20;           	  "product":"6ad75d6cead0beded09a488e",
 
-&#x20;   "qty\_recieved":"103", 
+&#x20;           	  "quantity":103,
 
-&#x20;   "unit\_purchase\_cost":"500", 
+&#x20;           	  "unit\_purchase\_cost":20
 
-&#x20;   "status":"failed"
+&#x20;       	}
+
+&#x20;  	],
+
+&#x20;  "warehouse":"6ada093231a842d12136b5b5", 
+
+&#x20;  "status":\["completed", "failed", "pending"]
 
 }
 
@@ -436,6 +442,12 @@ DESCP To get all purchases
 GET /purchases/get/:purchase\_id
 
 DESCP To get a purchase by id
+
+
+
+GET /purchases/:purchase\_id/recieve
+
+DESCP To recieve a purchase
 
 
 
@@ -467,6 +479,81 @@ DESCP To erase a purchase by id
 
 ##### **STOCK**
 
+POST /stocks/createStock/
+
+DESCP To create a stock
+
+BODY {
+
+&#x20;   "product":"6ad77d8f04091b90e37a597d",
+
+&#x20;   "warehouse":"7ad79d8f04091b90e37a007d",
+
+&#x20;   "category":"6ad77d8fdac91b90e37a597d",
+
+&#x20;   "quantity":10,
+
+}
+
+
+
+
+
+GET /stocks/getAll/
+
+DESCP To retrieve all stocks
+
+
+
+
+
+GET /stocks/getAll\_by/:stock\_id
+
+DESCP To retrieve a stock
+
+
+
+
+
+PUT /stocks/stock\_update/:stock\_id
+
+DESCP To update a stock (if necessary)
+
+BODY {
+
+&#x20;   "product":"6ad77d8f04091b90e37a597d",
+
+&#x20;   "warehouse":"7ad79d8f04091b90e37a007d",
+
+&#x20;   "category":"6ad77d8fdac91b90e37a597d",
+
+&#x20;   "quantity":10,
+
+}
+
+
+
+
+
+DELETE /stocks/erase/:stock\_id
+
+DESCP To delete a stock (if necessary)
+
+
+
+
+
+GET /stocks/getFrom/:warehouse\_id
+
+DESCP To get stocks under a warehouse
+
+
+
+
+
+GET /stocks/getBy/:cat\_id/from/:warehouse\_id
+
+DESCP To get stocks of a specific category under a warehouse
 
 
 
@@ -474,6 +561,145 @@ DESCP To erase a purchase by id
 
 
 
+
+
+
+
+
+
+##### **STOCK MOVEMENT**
+
+POST /stock\_movements/create/
+
+DESCP To create a stock movements that updates the stock's quantity
+
+BODY { 
+
+&#x09;"product":"6ad7a2cb76b0d1b075ee2bd2",
+
+&#x20;	"warehouse":"6ad7a2cb76b0d1b075ee2bd2",
+
+&#x20;	"category":"6ad7a2cb76b0d1b075ee2bd2",
+
+&#x20;	"quantity\_affected":7,
+
+&#x20;	"movementType":\["stock-in","stock-out", "adjusted-in", "adjusted-out"],
+
+&#x20;	"reason":"Intitial stock retrieved",
+
+&#x09;"referenceType":\["purchase","sale","adjustment"]
+
+&#x20;}
+
+
+
+
+
+GET /stock\_movements/getAll/
+
+DESCP To get all stock movements
+
+
+
+
+
+GET /stock\_movements/getBy/:movement\_id
+
+DESCP To get a stock movement by id
+
+
+
+
+
+GET /stock\_movements/getOf/:product\_id
+
+DESCP To get all stock movements of a product
+
+
+
+
+
+GET /stock\_movements/getFrom/:warehouse\_id
+
+DESCP To get all stock movements under a warehouse
+
+
+
+
+
+
+
+
+
+
+
+##### **SALES**
+
+
+
+POST /sales/
+
+DESCP To make sales
+
+BODY{
+
+&#x20;   "warehouse":"6ada093231a842d12136b5b5",
+
+&#x20;   "items":\[
+
+&#x20;       {
+
+&#x20;           "product":"6ad7a2cb76b0d1b075ee2bd2",
+
+&#x20;           "quantity":10,
+
+&#x20;           "unit\_selling\_price":20000
+
+&#x20;       }
+
+&#x20;   ]
+
+}
+
+
+
+
+
+GET /sales/getAll/
+
+DESCP To get all sales
+
+
+
+
+
+GET /sales/getAll/:sale\_id
+
+DESCP To get a sale by id
+
+
+
+
+
+GET /sales/getFrom/:warehouse\_id
+
+DESCP To get sales under a warehouse
+
+
+
+
+
+
+
+
+
+##### **Low\_stock\_report**
+
+
+
+GET /sales/getAll/
+
+DESCP To get a sale by id
 
 
 

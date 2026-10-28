@@ -21,7 +21,7 @@ const productSchema = new mongoose.Schema({
     },
     quantity:{
         type: Number,
-        default:null
+        default:0
     },
     inStock:{
         type: Boolean,
