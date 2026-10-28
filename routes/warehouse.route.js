@@ -13,5 +13,4 @@ router.get("/:warehouse_id",getWarehouseById);
 router.put("/update/:warehouse_id",upload.array("warehouse_img",5),staffAuthMiddleware,authorizeRoles("manager"), updateWarehouse);
 router.delete("/delete/:warehouse_id",staffAuthMiddleware,authorizeRoles("admin"),deleteWarehouse)
 
-
 export default router;

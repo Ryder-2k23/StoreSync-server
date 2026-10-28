@@ -4,7 +4,7 @@ import { staffAuthMiddleware, authorizeRoles } from "../middlewares/auth.middlew
 
 const router = express.Router();
 
-router.get("/getAll/",staffAuthMiddleware, getLowStock);
+router.get("/getAll/",staffAuthMiddleware, getLowStock); 
 
 
 export default router;

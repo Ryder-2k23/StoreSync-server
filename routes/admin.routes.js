@@ -5,7 +5,7 @@ import { staffAuthMiddleware, authorizeRoles } from "../middlewares/auth.middlew
 
 const router = express.Router();
 
-router.post("/",authorizeRoles("admin"), registerAdmin);
+router.post("/", registerAdmin);
 router.post("/login", loginAdmin);
 router.get("/",staffAuthMiddleware,authorizeRoles("admin"), getAllStaffs);
 router.get("/:staff_id",staffAuthMiddleware,authorizeRoles("admin"), getSingleStaff);
