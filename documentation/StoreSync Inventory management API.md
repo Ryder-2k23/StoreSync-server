@@ -13,11 +13,213 @@
 
 
 
-**MAIN\_URL**:http://localhost:6000/StoreSync
+**MAIN\_URL**:https://storesync-server.onrender.com
 
 
 
 NB: *Header tokens are required for accessing most routes*
+
+
+
+
+
+
+
+
+
+##### **ADMIN**
+
+POST /admin/
+
+DESCP To register admin
+
+BODY {
+
+&#x20;   "first\_name":"Alaric",
+
+&#x20;   "last\_name":"saltzman",
+
+&#x20;   "email":"saltz@gmail.com",
+
+&#x20;   "contact":"07009909812",
+
+&#x20;   "password":"1234"
+
+}
+
+
+
+POST /admin/login
+
+DESCP To login admin
+
+BODY {
+
+&#x20;   "email":"saltz@gmail.com",
+
+&#x20;   "password":"1234"
+
+}
+
+
+
+
+
+
+
+GET /admin/ \[TOKEN REQUIRED]\[AUTHORIZATION- admin]
+
+DESCP To get all staffs
+
+
+
+GET /admin/:staff\_id \[TOKEN REQUIRED]\[AUTHORIZATION-admin]
+
+DESCP To get staff by id
+
+
+
+PUT /admin/update/:admin\_id \[TOKEN REQUIRED]\[AUTHORIZATION-admin]
+
+DESCP To update admin profile
+
+BODY {
+
+&#x20;   "first\_name":"Alaric",
+
+&#x20;   "last\_name":"saltzman",
+
+&#x20;   "email":"saltz@gmail.com",
+
+&#x20;   "contact":"07009909812",
+
+&#x20;   "password":"1234",
+
+&#x20;   "avatar":"me.png",
+
+&#x20;   "bio": Acknowledge me"
+
+}
+
+
+
+
+
+DELETE /admin/delete/:staff\_id \[TOKEN REQUIRED]\[AUTHORIZATION-admin]
+
+DESCP To erase a staff by id
+
+
+
+
+
+PUT /admin/change\_role/:staff\_id \[TOKEN REQUIRED]\[AUTHORIZATION-admin]
+
+DESCP To assign a role to a staff
+
+BODY {
+
+&#x20;   "role":"manager"
+
+}
+
+
+
+
+
+
+
+##### **STAFF**
+
+POST /staff/
+
+DESCP To register staff
+
+BODY {
+
+&#x20;   "first\_name":"Alaric",
+
+&#x20;   "last\_name":"saltzman",
+
+&#x20;   "email":"saltz@gmail.com",
+
+&#x20;   "contact":"07009909812",
+
+&#x20;   "password":"1234"
+
+}
+
+
+
+GET /staff/
+
+DESCP To get all staffs
+
+
+
+
+
+POST /staff/login
+
+DESCP To login staff
+
+BODY {
+
+&#x20;   "email":"saltz@gmail.com",
+
+&#x20;   "password":"1234"
+
+}
+
+
+
+
+
+GET /staff/employee/:staff\_id \[TOKEN REQUIRED]
+
+DESCP To get a staff by id
+
+
+
+
+
+PUT /staff/update/:staff\_id \[TOKEN REQUIRED]\[AUTHORIZATION-staff]
+
+DESCP To update profile
+
+BODY {
+
+&#x20;   "first\_name":"Alaric",
+
+&#x20;   "last\_name":"saltzman",
+
+&#x20;   "email":"saltz@gmail.com",
+
+&#x20;   "contact":"07009909812",
+
+&#x20;   "password":"1234",
+
+&#x20;   "avatar":"me.png",
+
+&#x20;   "bio":"i am a staff"
+
+}
+
+
+
+GET /staff/delete/:staff\_id \[TOKEN REQUIRED] \[AUTHORIZATION-admin]
+
+DESCP To erase a staff by id
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -43,7 +245,7 @@ DESCP To get a single product
 
 
 
-POST /products/
+POST /products/ \[TOKEN REQUIRED]\[AUTHORIZATION-manager]
 
 DESCP To create new products
 
@@ -85,7 +287,7 @@ BODY {
 
 
 
-PUT /products/update/:product\_id
+PUT /products/update/:product\_id \[TOKEN REQUIRED]\[AUTHORIZATION-manager, admin]
 
 DESCP To upload product image
 
@@ -99,7 +301,7 @@ BODY {
 
 
 
-PUT /products/update/:product\_id
+PUT /products/update/:product\_id \[TOKEN REQUIRED]\[AUTHORIZATION-manager, admin]
 
 DESCP To assign category to a product
 
@@ -123,7 +325,7 @@ DESCP To get all products of a category
 
 
 
-DELETE /products/delete/:product\_id
+DELETE /products/delete/:product\_id \[TOKEN REQUIRED]\[AUTHORIZATION-manager, admin]
 
 DESCP To delete product
 
@@ -133,7 +335,7 @@ DESCP To delete product
 
 ##### **CATEGORY**
 
-POST /categories/create
+POST /categories/create \[TOKEN REQUIRED]\[AUTHORIZATION-storekeeper]
 
 DESCP To create new categories
 
@@ -163,7 +365,7 @@ DESCP To get a single category
 
 
 
-PUT /categories/update/:cat\_id
+PUT /categories/update/:cat\_id \[TOKEN REQUIRED]\[AUTHORIZATION-storekeeper]
 
 DESCP To update category
 
@@ -177,7 +379,7 @@ BODY {
 
 
 
-PUT /categories/update/:cat\_id
+PUT /categories/update/:cat\_id \[TOKEN REQUIRED]\[AUTHORIZATION-storekeeper]
 
 DESCP To upload category image
 
@@ -191,7 +393,7 @@ BODY {
 
 
 
-DELETE /categories/delete/:cat\_id
+DELETE /categories/delete/:cat\_id \[TOKEN REQUIRED]\[AUTHORIZATION-storekeeper]
 
 DESCP To delete category
 
@@ -209,7 +411,7 @@ DESCP To delete category
 
 ##### **SUPPLIER**
 
-POST /suppliers/create
+POST /suppliers/create \[TOKEN REQUIRED]\[AUTHORIZATION-manager, admin]
 
 DESCP To create new supplier
 
@@ -249,7 +451,7 @@ DESCP To get a supplier by id
 
 
 
-PUT /suppliers/update/:sup\_id
+PUT /suppliers/update/:sup\_id \[TOKEN REQUIRED]\[AUTHORIZATION-manager, admin]
 
 DESCP To update  a supplier's details
 
@@ -275,7 +477,7 @@ BODY {
 
 &#x20;    "currency\_of\_transaction":"NGN"
 
-&#x20;    **"**sup\_bank**":"**Access bank"
+&#x20;    "sup\_bank":"Access bank"
 
 &#x20;    "sup\_bank\_account":"1856181303"
 
@@ -285,7 +487,7 @@ BODY {
 
 
 
-DELETE /suppliers/delete/:sup\_id
+DELETE /suppliers/delete/:sup\_id \[TOKEN REQUIRED]\[AUTHORIZATION-admin]
 
 DESCP To delete a supplier's details
 
@@ -307,7 +509,7 @@ DESCP To delete a supplier's details
 
 ##### **WAREHOUSE**
 
-POST /warehouses/create
+POST /warehouses/create\[TOKEN REQUIRED]\[AUTHORIZATION-manager]
 
 DESCP To create new warehouse
 
@@ -343,7 +545,7 @@ DESCP To get a warehouse by id
 
 
 
-PUT /warehouses/update/:warehouse\_id
+PUT /warehouses/update/:warehouse\_id \[TOKEN REQUIRED]\[AUTHORIZATION-manager]
 
 DESCP To update a warehouse
 
@@ -357,7 +559,7 @@ BODY {
 
 &#x20;   "country":"Nigeria",
 
-&#x20;   "status":\["active", "inactive", "suspended"],	
+&#x20;   "status":\["active", "inactive", "suspended"],
 
 &#x20;  "manager\_id":"6ad97cfa2052a00f29747553"
 
@@ -373,7 +575,7 @@ BODY {
 
 
 
-PUT /warehouses/update/:warehouse\_id
+PUT /warehouses/update/:warehouse\_id \[TOKEN REQUIRED]\[AUTHORIZATION-manager]
 
 DESCP To upload a warehouse image
 
@@ -387,7 +589,7 @@ BODY {
 
 
 
-DELETE /warehouses/delete/:warehouse\_id
+DELETE /warehouses/delete/:warehouse\_id \[TOKEN REQUIRED]\[AUTHORIZATION- admin]
 
 DESCP To delete a warehouse
 
@@ -403,7 +605,7 @@ DESCP To delete a warehouse
 
 ##### **PURCHASE**
 
-POST /purchases/
+POST /purchases/ \[TOKEN REQUIRED]\[AUTHORIZATION-manager]
 
 DESCP To make a purchase
 
@@ -425,7 +627,7 @@ BODY{
 
 &#x20;  	],
 
-&#x20;  "warehouse":"6ada093231a842d12136b5b5", 
+&#x20;  "warehouse":"6ada093231a842d12136b5b5",
 
 &#x20;  "status":\["completed", "failed", "pending"]
 
@@ -433,31 +635,31 @@ BODY{
 
 
 
-GET /purchases/
+GET /purchases/ \[TOKEN REQUIRED]
 
 DESCP To get all purchases
 
 
 
-GET /purchases/get/:purchase\_id
+GET /purchases/get/:purchase\_id \[TOKEN REQUIRED]
 
 DESCP To get a purchase by id
 
 
 
-GET /purchases/:purchase\_id/recieve
+GET /purchases/:purchase\_id/receive \[TOKEN REQUIRED]\[AUTHORIZATION- admin]
 
 DESCP To recieve a purchase
 
 
 
-GET /purchases/get/purchases\_from/:warehouse\_id
+GET /purchases/get/purchases\_from/:warehouse\_id \[TOKEN REQUIRED]
 
 DESCP To get purchases under a warehouse
 
 
 
-DELETE /purchases/delete/:purchase\_id"
+DELETE /purchases/delete/:purchase\_id" \[TOKEN REQUIRED]\[AUTHORIZATION-manager]
 
 DESCP To erase a purchase by id
 
@@ -469,6 +671,22 @@ DESCP To erase a purchase by id
 
 
 
+##### **PURCHASE REPORT**
+
+GET /purchase\_report/ \[TOKEN REQUIRED]\[AUTHORIZATION- admin, manager, storekeeper]
+
+DESCP To get purchase reports
+
+
+
+
+
+##### **SALES REPORT**
+
+GET /sale\_report/ \[TOKEN REQUIRED]\[AUTHORIZATION- admin, manager, storekeeper]
+
+DESCP To get sales reports
+
 
 
 
@@ -479,7 +697,7 @@ DESCP To erase a purchase by id
 
 ##### **STOCK**
 
-POST /stocks/createStock/
+POST /stocks/createStock/ \[TOKEN REQUIRED]\[AUTHORIZATION-storekeeper]
 
 DESCP To create a stock
 
@@ -499,7 +717,7 @@ BODY {
 
 
 
-GET /stocks/getAll/
+GET /stocks/getAll/ \[TOKEN REQUIRED]
 
 DESCP To retrieve all stocks
 
@@ -507,7 +725,7 @@ DESCP To retrieve all stocks
 
 
 
-GET /stocks/getAll\_by/:stock\_id
+GET /stocks/getAll\_by/:stock\_id \[TOKEN REQUIRED]
 
 DESCP To retrieve a stock
 
@@ -515,7 +733,7 @@ DESCP To retrieve a stock
 
 
 
-PUT /stocks/stock\_update/:stock\_id
+PUT /stocks/stock\_update/:stock\_id \[TOKEN REQUIRED]\[AUTHORIZATION-manager, admin]
 
 DESCP To update a stock (if necessary)
 
@@ -535,7 +753,7 @@ BODY {
 
 
 
-DELETE /stocks/erase/:stock\_id
+DELETE /stocks/erase/:stock\_id \[TOKEN REQUIRED]\[AUTHORIZATION- admin]
 
 DESCP To delete a stock (if necessary)
 
@@ -543,7 +761,7 @@ DESCP To delete a stock (if necessary)
 
 
 
-GET /stocks/getFrom/:warehouse\_id
+GET /stocks/getFrom/:warehouse\_id \[TOKEN REQUIRED]
 
 DESCP To get stocks under a warehouse
 
@@ -551,7 +769,7 @@ DESCP To get stocks under a warehouse
 
 
 
-GET /stocks/getBy/:cat\_id/from/:warehouse\_id
+GET /stocks/getBy/:cat\_id/from/:warehouse\_id \[TOKEN REQUIRED]
 
 DESCP To get stocks of a specific category under a warehouse
 
@@ -569,11 +787,11 @@ DESCP To get stocks of a specific category under a warehouse
 
 ##### **STOCK MOVEMENT**
 
-POST /stock\_movements/create/
+POST /stock\_movements/create/ \[TOKEN REQUIRED]\[AUTHORIZATION-storekeeper]
 
 DESCP To create a stock movements that updates the stock's quantity
 
-BODY { 
+BODY {
 
 &#x09;"product":"6ad7a2cb76b0d1b075ee2bd2",
 
@@ -595,7 +813,7 @@ BODY {
 
 
 
-GET /stock\_movements/getAll/
+GET /stock\_movements/getAll/ \[TOKEN REQUIRED]
 
 DESCP To get all stock movements
 
@@ -603,7 +821,7 @@ DESCP To get all stock movements
 
 
 
-GET /stock\_movements/getBy/:movement\_id
+GET /stock\_movements/getBy/:movement\_id \[TOKEN REQUIRED]
 
 DESCP To get a stock movement by id
 
@@ -611,7 +829,7 @@ DESCP To get a stock movement by id
 
 
 
-GET /stock\_movements/getOf/:product\_id
+GET /stock\_movements/getOf/:product\_id \[TOKEN REQUIRED]
 
 DESCP To get all stock movements of a product
 
@@ -619,13 +837,39 @@ DESCP To get all stock movements of a product
 
 
 
-GET /stock\_movements/getFrom/:warehouse\_id
+GET /stock\_movements/getFrom/:warehouse\_id \[TOKEN REQUIRED]
 
 DESCP To get all stock movements under a warehouse
 
 
 
+POST /stock\_movements/adjust \[TOKEN REQUIRED]\[AUTHORIZATION-storekeeper]
 
+DESCP To adjust adjust a stock
+
+BODY {
+
+&#x20; "product": "6ad7a2cb76b0d1b075ee2bd2",
+
+&#x20; "warehouse": "6ada093231a842d12136b5b5",
+
+&#x20; "category": "6ad77d8f04091b90e37a597d",
+
+&#x20; "actualQuantity": 45,
+
+&#x20; "reason": "Physical stock count correction"
+
+}
+
+
+
+
+
+##### **STOCK SUMMARY**
+
+GET /stockSummary/summary/  \[TOKEN REQUIRED]\[AUTHORIZATION-admin]
+
+DESCP To get all stock summaries
 
 
 
@@ -637,7 +881,7 @@ DESCP To get all stock movements under a warehouse
 
 
 
-POST /sales/
+POST /sales/ \[TOKEN REQUIRED]\[AUTHORIZATION-manager]
 
 DESCP To make sales
 
@@ -665,7 +909,7 @@ BODY{
 
 
 
-GET /sales/getAll/
+GET /sales/getAll/  \[TOKEN REQUIRED]
 
 DESCP To get all sales
 
@@ -673,7 +917,7 @@ DESCP To get all sales
 
 
 
-GET /sales/getAll/:sale\_id
+GET /sales/getAll/:sale\_id \[TOKEN REQUIRED]
 
 DESCP To get a sale by id
 
@@ -681,7 +925,7 @@ DESCP To get a sale by id
 
 
 
-GET /sales/getFrom/:warehouse\_id
+GET /sales/getFrom/:warehouse\_id \[TOKEN REQUIRED]
 
 DESCP To get sales under a warehouse
 
@@ -697,33 +941,7 @@ DESCP To get sales under a warehouse
 
 
 
-GET /sales/getAll/
+GET /sales/getAll/  \[TOKEN REQUIRED]
 
 DESCP To get a sale by id
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
