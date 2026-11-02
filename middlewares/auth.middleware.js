@@ -89,8 +89,9 @@ export const adminAuthMiddleware = async(req, res, next)=>{
 
 export const authorizeRoles = (...allowedRoles) => {
     return (req, res, next) => {
+        const user = req.admin || req.staff;
         // Authentication middleware should run first
-        if (!req.staff) {
+        if (!user) {
             return res.status(401).json({
                 success: false,
                 message: "Authentication required"
@@ -98,7 +99,7 @@ export const authorizeRoles = (...allowedRoles) => {
         }
 
         // Check whether the logged-in staff member has permission
-        if (!allowedRoles.includes(req.staff.role)) {
+        if (!allowedRoles.includes(user.role)) {
             return res.status(403).json({
                 success: false,
                 message: "You are not authorized to perform this action"
