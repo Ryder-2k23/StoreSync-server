@@ -162,16 +162,52 @@ export const updateCategory = async (req, res) => {
 };
 
 
+// export const deleteCategory = async(req, res)=>{
+//     try{
+//         const { cat_id } = req.params;
+//         const category = await Category.findByIdAndDelete(cat_id);
+
+//         if(!category){
+//             return sendError(res, 404, "Category not found");
+//         }
+
+//         return sendSuccess(res, 200, `${category.cat_name} has been deleted successfully`);
+//     }catch(error){
+//         console.error("Error deleting category: ", error);
+
+//         return sendError(
+//             res,
+//             500,
+//             "Failed to delete category",
+//             error.message
+//         );
+//     }
+// }
+
+
 export const deleteCategory = async(req, res)=>{
     try{
         const { cat_id } = req.params;
-        const category = await Category.findByIdAndDelete(cat_id);
+
+        // Check if category exists
+        const category = await Category.findById(cat_id);
 
         if(!category){
             return sendError(res, 404, "Category not found");
         }
 
-        return sendSuccess(res, 200, `${category.cat_name} has been deleted successfully`);
+        // Delete all products connected to this category
+        await Product.deleteMany({ category: cat_id });
+
+        // Delete the category itself
+        await Category.findByIdAndDelete(cat_id);
+
+        return sendSuccess(
+            res,
+            200,
+            `${category.cat_name} and all its associated products have been deleted successfully`
+        );
+
     }catch(error){
         console.error("Error deleting category: ", error);
 

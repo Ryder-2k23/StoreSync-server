@@ -59,7 +59,7 @@ const warehouseSchema = new mongoose.Schema({
 ],
     manager_id:{
         type: mongoose.Schema.Types.ObjectId,
-        ref:"Manager", 
+        ref:"Staff", 
         default: null
     }
 },{timestamps: true});

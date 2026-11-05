@@ -137,7 +137,6 @@ export const updateWarehouse = async(req, res) => {
     }
 }
 
-
 export const deleteWarehouse = async(req, res) => {
     try{
         const { warehouse_id } = req.params;

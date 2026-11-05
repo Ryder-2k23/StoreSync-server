@@ -5,8 +5,8 @@ import { staffAuthMiddleware, authorizeRoles } from "../middlewares/auth.middlew
 const router = express.Router();
 
 router.post("/",staffAuthMiddleware,authorizeRoles("manager"), createSale);
-router.get("/getAll/",staffAuthMiddleware, getAllSales);
-router.get("/getAll/:sale_id",staffAuthMiddleware, getSaleById)
-router.get("/getFrom/:warehouse_id",staffAuthMiddleware, getSalesByWarehouse)
+router.get("/getAll/",staffAuthMiddleware, authorizeRoles("manager"), getAllSales);
+router.get("/getAll/:sale_id",staffAuthMiddleware, authorizeRoles("manager"), getSaleById)
+router.get("/getFrom/:warehouse_id",staffAuthMiddleware, authorizeRoles("manager"), getSalesByWarehouse)
 
 export default router;

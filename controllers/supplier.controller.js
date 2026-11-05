@@ -4,12 +4,13 @@ import jwt from "jsonwebtoken";
 import { sendSuccess, sendError } from "../utils/response.js";
 
 import Supplier from "../models/supplier.model.js";
+import Agent from "../models/agent.model.js";
 
 export const createSupplier = async(req, res)=>{
     try {
-        const { supplier_name,supplier_agent,agent_contact,supplier_email,supplier_location,delivery_address } = req.body;
+        const { supplier_name,supplier_agent,supplier_email,supplier_location,delivery_address } = req.body;
 
-        if(!supplier_name || !supplier_agent || !agent_contact || !supplier_email || !supplier_location || !delivery_address){
+        if(!supplier_name || !supplier_agent || !supplier_email || !supplier_location || !delivery_address){
             return sendError(
                 res,
                 400,
@@ -20,7 +21,6 @@ export const createSupplier = async(req, res)=>{
         const supplier = await Supplier.create({
             supplier_name,
             supplier_agent,
-            agent_contact,
             supplier_email,
             supplier_location,
             delivery_address
@@ -43,7 +43,7 @@ export const createSupplier = async(req, res)=>{
 
 export const getAllSuppliers = async(req, res)=>{
     try {
-        const suppliers = await Supplier.find().sort({ createdAt: -1 });
+        const suppliers = await Supplier.find().sort({ createdAt: -1 }).populate("agent", "first_name last_name contact  email");
         return sendSuccess(res, 200, "Suppliers retrieved successfully", suppliers);
     } catch(error){
         console.error("Error retrieve supplier: ", error);
@@ -60,7 +60,7 @@ export const getAllSuppliers = async(req, res)=>{
 export const getSupplierById = async(req, res)=>{
     try {
         const { sup_id } = req.params;
-        const supplier = await Supplier.findById(sup_id);
+        const supplier = await Supplier.findById(sup_id).populate("agent", "first_name last_name contact  email");;
 
         if(!supplier){;
             return sendError(
@@ -121,6 +121,8 @@ export const updateSupplier = async(req, res)=>{
 export const deleteSupplier = async(req, res)=>{
     try {
         const { sup_id } = req.params;
+        // const supplier = await Supplier.findById(sup_id);
+
         const supplier = await Supplier.findByIdAndDelete(sup_id);
 
         if(!supplier){
@@ -130,6 +132,7 @@ export const deleteSupplier = async(req, res)=>{
                 "Supplier not found"
             )
         };
+
 
         return sendSuccess(res, 201, `supplier deleted successfully`);
 

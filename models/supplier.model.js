@@ -7,19 +7,13 @@ const supplierSchema = new mongoose.Schema({
         uppercase: true,
         trim: true
     },
-    supplier_agent:{
-        type: String,
-        required: true,
-        lowercase: true,
-        trim: true
-    },
-    agent_contact:{
-        type: String,
-        required: true,
-        trim: true,
-        minlength: 11,
-        maxlength: 11
-    },
+    supplier_agent:[
+        {
+        type: mongoose.Schema.Types.ObjectId,
+        ref:"Agent", 
+        default: null
+    }
+    ],
     supplier_email:{
         type: String,
         required: true,

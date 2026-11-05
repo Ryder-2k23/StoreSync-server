@@ -173,9 +173,14 @@ export const getSingleStaff = async(req, res)=>{
 export const updateStaff = async(req, res)=>{
     try {
         const { staff_id } = req.params;
+         const { first_name, last_name, contact,  avatar, bio } = req.body;
 
         const updateData = {
-            ...req.body
+           first_name,
+            last_name,
+            contact,
+            avatar,
+            bio
         };
 
         if(req.file){

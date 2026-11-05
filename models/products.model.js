@@ -21,33 +21,39 @@ const productSchema = new mongoose.Schema({
     },
     quantity:{
         type: Number,
-        default:0
+        default:0,
+         required: true,
     },
     inStock:{
         type: Boolean,
         enum: [true, false],
-        default: true
+        default: true,
+         required: true,
     },
     product_image:[
     {
         url: {
             type: String,
             trim:true,
-            default:null
+            default:null,
+            required: true,
         },
         public_id: {
             type: String,
             trim:true,
-            default:null
+            default:null,
+            required: true,
         }
     }
 ],
      category: {
         type: mongoose.Schema.Types.ObjectId,
         ref:"Category", 
+        required: true,
         default: null
     }
 }, {timestamps: true});
 
 const Product = mongoose.model("Product", productSchema);
 export default Product;
+

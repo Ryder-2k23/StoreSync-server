@@ -223,10 +223,6 @@ DESCP To erase a staff by id
 
 
 
-
-
-
-
 ##### **PRODUCT**
 
 GET /products/
@@ -257,6 +253,14 @@ BODY {
 
 &#x09;"reorderThreshold":"4",
 
+&#x09;"category":"12392022",
+
+&#x09;"inStock": true,
+
+&#x09;"quantity":"12"
+
+
+
 }
 
 
@@ -277,7 +281,7 @@ BODY {
 
 &#x09;"reorderThreshold":"4",
 
-&#x09;"inStock": "true",
+&#x09;"inStock": true,
 
 &#x09;"quantity":"12"
 
@@ -303,7 +307,7 @@ BODY {
 
 PUT /products/update/:product\_id \[TOKEN REQUIRED]\[AUTHORIZATION-manager, admin]
 
-DESCP To assign category to a product
+DESCP To updae category to a product
 
 BODY {
 

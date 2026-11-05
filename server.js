@@ -17,7 +17,8 @@ import stockSummary from "./routes/stockSummary.routes.js";
 import purchase_report from  "./routes/purchase_report.routes.js";
 import sale_report from  "./routes/sale_report.route.js";
 import staffRoute from "./routes/staff.routes.js";
-import adminRoute from "./routes/admin.routes.js"
+import adminRoute from "./routes/admin.routes.js";
+import agentRoute from "./routes/agent.routes.js"
 
 dotenv.config()
 
@@ -55,7 +56,8 @@ app.use("/StoreSync/stockSummary", stockSummary );
 app.use("/StoreSync/purchase_report", purchase_report);
 app.use("/StoreSync/sale_report", sale_report);
 app.use("/StoreSync/staff", staffRoute);
-app.use("/StoreSync/admin", adminRoute)
+app.use("/StoreSync/admin", adminRoute);
+app.use("/StoreSync/agent", agentRoute);
 
 
 connectDB()

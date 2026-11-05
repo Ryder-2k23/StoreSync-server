@@ -10,11 +10,16 @@ env.config();
 
 export const createProduct = async(req, res)=>{
     try {
-        const { product_name, unitPrice, reorderThreshold } = req.body;
+        const { product_name, unitPrice, reorderThreshold, category, quantity, inStock, product_image } = req.body;
 
-        if(!product_name || !unitPrice || !reorderThreshold) {
+        if(!product_name || !unitPrice || !reorderThreshold  || !category || !quantity || !inStock){ {
             return sendError(res, 400, " Please provide all required fields");
         };
+
+        const categoryExists = await Category.findById(category);
+        if(!categoryExists){
+            return sendError(res, 404, "Category not found");
+        }
 
         const product = await Product.create({
             product_name,
@@ -28,7 +33,8 @@ export const createProduct = async(req, res)=>{
         });
 
         return sendSuccess(res, 201, "Product created successfully", product);
-    } catch (error) {
+    } 
+}catch (error) {
         console.error("Error creating Product: ", error);
 
         return sendError(
